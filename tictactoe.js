@@ -4,6 +4,9 @@ const selectOBtn = selectBox.querySelector(".options .playero");
 const board = document.querySelector(".board");
 const all = document.querySelectorAll("section span");
 const players = document.querySelector(".players");
+const resultBox = document.querySelector(".result");
+const wonText = document.querySelector(".won-text");
+const presentBtn = document.querySelector("button");
 
 window.onload = ()=>
 {
@@ -32,6 +35,7 @@ window.onload = ()=>
 let playerXIcon = "fas fa-times";
 let playerOIcon = "far fa-circle";
 let playerSign = "X";
+let runBot = true;
 
 /* when the user press, insert X or O icon */
 function clickedBox(element)
@@ -50,6 +54,8 @@ function clickedBox(element)
         players.classList.add("active");
         element.setAttribute("id",playerSign);
     }
+    winner();
+    board.style.pointerEvents="none";
     element.style.pointerEvents="none"; //after choosing a box, the box can't be selected again
     /* setting a random time delay so the function bot() will delay randomaly
      * setTimeout -> calling the function bot() with the random delay time.
@@ -61,8 +67,10 @@ function clickedBox(element)
     },delayTimeForRandom);
 }
 
-function bot()
+function bot(runBot)
 {
+ if(runBot)
+ {
     playerSign="O";
     let unselectedBox = []; //store the unselected box index
     for (let index = 0; index < all.length; index++) 
@@ -89,13 +97,52 @@ function bot()
             players.classList.remove("active");
             all[randBox].setAttribute("id",playerSign);
         }
+        winner();
     }
+    board.style.pointerEvents="auto";
     all[randBox].style.pointerEvents = "none"; //when the box selected,can't select again or click
+    playerSign="X";
+ }
 }
 
 /* return the name of the class by the id */
-function getId()
+function getId(idName)
 {
-    return document.querySelector("").id;
+    return document.querySelector(".box" + idName).id;
 }
 
+/* checking if there is 3 boxes that match
+ * need to check : (1,2,3),(4,5,6),(7,8,9)
+ * (1,4,7),(2,5,8),(3,6,9)
+ * (1,5,9),(3,5,7)
+ */
+function checkTree(val1,val2,val3,sign)
+{
+    if(getId(val1) == sign && getId(val2) == sign && getId(val3) == sign )
+    {
+        return true;
+    }
+}
+
+function winner()
+{ 
+    /* checking the rows */
+    if(checkTree(1,2,3,playerSign) || checkTree(4,5,6,playerSign) || checkTree(7,8,9,playerSign))
+    {
+        runBot = false;
+        bot(runBot);
+    }
+    /* checking the columns */
+    if(checkTree(1,4,7,playerSign) || checkTree(2,5,8,playerSign) || checkTree(3,6,9,playerSign))
+    {
+        runBot = false;
+        bot(runBot);
+    } 
+     /* checking the Diagonals */
+    if(checkTree(1,5,9,playerSign) || checkTree(3,5,7,playerSign))
+    {
+        runBot = false;
+        bot(runBot);
+    }
+  
+}
