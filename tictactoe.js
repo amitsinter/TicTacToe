@@ -31,19 +31,24 @@ window.onload = ()=>
 
 let playerXIcon = "fas fa-times";
 let playerOIcon = "far fa-circle";
+let playerSign = "X";
 
 /* when the user press, insert X or O icon */
 function clickedBox(element)
 {
     if(players.classList.contains("player"))
     {
+        
         element.innerHTML=`<i class="${playerOIcon}"></i>`; 
         players.classList.add("active");
+        playerSign="O";
+        element.setAttribute("id",playerSign);
     }
     else
     {
         element.innerHTML=`<i class="${playerXIcon}"></i>`;
         players.classList.add("active");
+        element.setAttribute("id",playerSign);
     }
     element.style.pointerEvents="none"; //after choosing a box, the box can't be selected again
     /* setting a random time delay so the function bot() will delay randomaly
@@ -58,6 +63,7 @@ function clickedBox(element)
 
 function bot()
 {
+    playerSign="O";
     let unselectedBox = []; //store the unselected box index
     for (let index = 0; index < all.length; index++) 
     {
@@ -73,12 +79,23 @@ function bot()
         if(players.classList.contains("player"))
         {
             all[randBox].innerHTML=`<i class="${playerXIcon}"></i>`; 
-            players.classList.add("active");
+            players.classList.remove("active");
+            playerSign="X";
+            all[randBox].setAttribute("id",playerSign);
         }
         else
         {
             all[randBox].innerHTML=`<i class="${playerOIcon}"></i>`;
-            players.classList.add("active");
+            players.classList.remove("active");
+            all[randBox].setAttribute("id",playerSign);
         }
     }
+    all[randBox].style.pointerEvents = "none"; //when the box selected,can't select again or click
 }
+
+/* return the name of the class by the id */
+function getId()
+{
+    return document.querySelector("").id;
+}
+
