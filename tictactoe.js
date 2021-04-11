@@ -42,10 +42,9 @@ function clickedBox(element)
 {
     if(players.classList.contains("player"))
     {
-        
+        playerSign="O";
         element.innerHTML=`<i class="${playerOIcon}"></i>`; 
         players.classList.add("active");
-        playerSign="O";
         element.setAttribute("id",playerSign);
     }
     else
@@ -55,8 +54,8 @@ function clickedBox(element)
         element.setAttribute("id",playerSign);
     }
     winner();
-    board.style.pointerEvents="none";
     element.style.pointerEvents="none"; //after choosing a box, the box can't be selected again
+    board.style.pointerEvents="none";
     /* setting a random time delay so the function bot() will delay randomaly
      * setTimeout -> calling the function bot() with the random delay time.
      */
@@ -67,12 +66,12 @@ function clickedBox(element)
     },delayTimeForRandom);
 }
 
-function bot(runBot)
+function bot()
 {
+ let unselectedBox = []; //store the unselected box index
  if(runBot)
  {
     playerSign="O";
-    let unselectedBox = []; //store the unselected box index
     for (let index = 0; index < all.length; index++) 
     {
        if(all[index].childElementCount==0) //if span has no any child element
@@ -86,9 +85,9 @@ function bot(runBot)
     {
         if(players.classList.contains("player"))
         {
+            playerSign="X";
             all[randBox].innerHTML=`<i class="${playerXIcon}"></i>`; 
             players.classList.remove("active");
-            playerSign="X";
             all[randBox].setAttribute("id",playerSign);
         }
         else
@@ -99,8 +98,8 @@ function bot(runBot)
         }
         winner();
     }
-    board.style.pointerEvents="auto";
     all[randBox].style.pointerEvents = "none"; //when the box selected,can't select again or click
+    board.style.pointerEvents="auto";
     playerSign="X";
  }
 }
@@ -143,6 +142,10 @@ function winner()
     {
         runBot = false;
         bot(runBot);
+        setTimeout(()=>{
+            board.classList.remove("show");
+            resultBox.classList.add("show");
+        },700);
     }
   
 }
