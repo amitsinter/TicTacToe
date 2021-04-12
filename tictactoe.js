@@ -5,8 +5,8 @@ const board = document.querySelector(".board");
 const all = document.querySelectorAll("section span");
 const players = document.querySelector(".players");
 const resultBox = document.querySelector(".result");
-const wonText = document.querySelector(".won-text");
-const presentBtn = document.querySelector("button");
+const wonText = resultBox.querySelector(".won-text");
+const presentBtn = resultBox.querySelector("button");
 
 window.onload = ()=>
 {
@@ -129,23 +129,53 @@ function winner()
     if(checkTree(1,2,3,playerSign) || checkTree(4,5,6,playerSign) || checkTree(7,8,9,playerSign))
     {
         runBot = false;
-        bot(runBot);
+        bot();
+        setTimeout(()=>{
+            board.classList.remove("show");
+            resultBox.classList.add("show");
+        },700);
+        wonText.innerHTML=`Player <p>${playerSign}</p> Won the Game !!`;
     }
     /* checking the columns */
     if(checkTree(1,4,7,playerSign) || checkTree(2,5,8,playerSign) || checkTree(3,6,9,playerSign))
     {
         runBot = false;
-        bot(runBot);
+        bot();
+        setTimeout(()=>{
+            board.classList.remove("show");
+            resultBox.classList.add("show");
+        },700);
+        wonText.innerHTML=`Player <p>${playerSign}</p> Won the Game !!`;
     } 
      /* checking the Diagonals */
     if(checkTree(1,5,9,playerSign) || checkTree(3,5,7,playerSign))
     {
         runBot = false;
-        bot(runBot);
+        bot();
         setTimeout(()=>{
             board.classList.remove("show");
             resultBox.classList.add("show");
         },700);
+        wonText.innerHTML=`Player <p>${playerSign}</p> Won the Game !!`;
+    }
+    else
+    {
+        if(getId(1) != "" && getId(1) != "" && getId(2) != "" && getId(3) != "" && getId(4) != "" && getId(5) != "" && getId(6) != "" && getId(7) != "" && getId(8) != "" && getId(9) != "" )
+        {
+            runBot = false;
+            bot();
+            setTimeout(()=>{
+                board.classList.remove("show");
+                resultBox.classList.add("show");
+            },700);
+            wonText.textContent="Match has been drawn";
+        }
+
     }
   
+}
+ /* reload the current page */
+presentBtn.onclick = ()=>
+{
+    window.location.reload();
 }
